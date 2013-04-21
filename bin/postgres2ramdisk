@@ -1,0 +1,59 @@
+#!/bin/sh
+
+source $(dirname $(readlink $0))/../etc/postgres-common
+
+CAPACITY=$(($CAPACITYMB * 1024 * 2))
+
+echo "Creating a ramdisk of size ${CAPACITYMB}MB (aprox.) size"
+
+[ -d $TMPDIR ] || mkdir $TMPDIR
+
+echo Stopping postgresql
+sh -c "$STOP"
+
+echo Creating ramdisk
+RAMDISKDEV=`hdiutil attach -nomount ram://$CAPACITY | tr -d ' \t'`
+echo ""
+
+echo Mkfs\'ing ramdisk \"${RAMDISKDEV}\"
+# newfs_hfs way (just works):
+sudo newfs_hfs -s -v PostgreSQL $RAMDISKDEV
+
+# diskutil eraseVolume way (creates a partition table):
+# diskutil eraseVolume hfsx PostgreSQL $RAMDISKDEV
+# umount $RAMDISKDEV
+
+# diskutil partitionDisk way (creates a partition table):
+# diskutil partitionDisk $RAMDISKDEV 1 hfsx PostgreSQL '100%'
+# umount $RAMDISKDEV
+echo ""
+
+echo Copying db
+sudo mount -v -o noatime -t hfs $RAMDISKDEV $TMPDIR
+sudo rsync --archive $MOUNTPOINT/ $TMPDIR/;
+echo ""
+
+echo Disabling time machine/fsevents/.Trashes on this volume
+# Don't do time machine backups of this volume
+sudo tmutil addexclusion $TMPDIR
+sudo touch $TMPDIR/{.fseventsd/no_log,.metadata_never_index,.Trashes}
+echo ""
+
+echo Unmounting temporary mount
+sudo umount -v $RAMDISKDEV
+echo ""
+
+echo Mounting on $DATADIR
+#sudo mount -o bind $TMPDIR $MOUNTPOINT;
+sudo mount -v -o noatime -t hfs $RAMDISKDEV $MOUNTPOINT
+sudo xcrun SetFile -a C $MOUNTPOINT
+sudo chmod 0700 $MOUNTPOINT
+echo ""
+
+echo Starting new postgresql
+sh -c "$START"
+echo ""
+
+echo To detach ramdisk use:
+echo   unmount-postgres
+echo ""

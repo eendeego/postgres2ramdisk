@@ -1,0 +1,48 @@
+#!/bin/sh
+
+source $(dirname $(readlink $0))/../etc/postgres-common
+
+RAMDISKDEV=`mount | grep $DATADIR | awk '{ print $1 }'`
+
+if [[ $RAMDISKDEV = "" ]]; then
+  echo $DATADIR is not mounted. Bailing out.
+  exit 1
+else
+  echo Postgres data dir \(\"$DATADIR\"\) mounted at \"$RAMDISKDEV\".
+  echo ""
+fi
+
+[ -d $TMPDIR ] || mkdir $TMPDIR
+
+echo Stopping postgresql
+sh -c "$STOP"
+echo ""
+
+# # kick out revisiond
+# sudo rm $MOUNTPOINT/.DocumentRevisions-V100/db-V1
+# #sudo mv $MOUNTPOINT/.DocumentRevisions-V100/db-V1_off /.DocumentRevisions-V100/db-V1
+# sudo killall revisiond
+
+echo Unmounting ramdisk \(\"$RAMDISKDEV\"\)
+echo sudo umount -v $RAMDISKDEV
+sudo umount -v $RAMDISKDEV
+echo ""
+
+#if [ true ]; then
+  echo Copying db \(via tmp dir \"$TMPDIR\"\)
+  sudo mount -v -t hfs $RAMDISKDEV $TMPDIR
+  sudo rsync --archive $TMPDIR/ $MOUNTPOINT/;
+  echo ""
+
+  echo Unmounting ramdisk \(\"$RAMDISKDEV\"\)
+  sudo umount -v $RAMDISKDEV
+  echo ""
+#fi
+
+echo Removing ramdisk \(\"$RAMDISKDEV\"\)
+sudo hdiutil detach $RAMDISKDEV
+echo ""
+
+echo Starting new postgresql
+sh -c "$START"
+echo ""

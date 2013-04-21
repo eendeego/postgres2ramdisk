@@ -1,0 +1,20 @@
+# Aproximate ramdisk capacity
+CAPACITYMB=512
+
+# mount point for the setup/teardown operations
+RAMDISKVOL="pg-ramdisk"
+TMPDIR="/private/tmp/$RAMDISKVOL"
+
+# # macports settings
+# POSTGRESQL=postgresql92
+# DATADIR=/opt/local/var/db/$POSTGRESQL
+# START="sudo port load $POSTGRESQL-server"
+# STOP="sudo port unload $POSTGRESQL-server"
+
+# homebrew settings
+DATADIR=/usr/local/var/postgres
+START="launchctl load $HOME/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
+STOP="launchctl unload $HOME/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
+
+# ramdisk mountpoint
+MOUNTPOINT=$DATADIR
