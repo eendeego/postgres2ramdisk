@@ -3,7 +3,7 @@
 
 These utilities allow you to run Postgres in a ram disk. It's main purpose is to speed up test in environments like Rails.
 
-For the moment only Max OS is supported (either via macports or homebrew postgresql installs.)
+For the moment only Mac OS is supported (either via macports or homebrew postgresql installs.)
 
 ##### DISCLAIMER: THIS IS NOT INTENDED TO BE RUN ON PRODUCTION ENVIRONMENTS
 ##### IF YOU RUIN (YOUR) IMPORTANT DATA, IT'S YOUR FAULT
