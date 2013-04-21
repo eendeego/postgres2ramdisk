@@ -13,6 +13,7 @@ For the moment only Max OS is supported (either via macports or homebrew postgre
 ### Prerequisites
 
 These install instructions assume you have:
+
 1.  ```~/bin``` and ```~/opt``` dirs with ```~/bin``` already in your ```PATH```.
 2.  An already working PostgreSQL install in either macports or homebrew.
 
@@ -52,11 +53,13 @@ The same note about password requests above also applies here.
 ## Other Tricks
 
 Your new shiny ramdisk will be shown on your desktop. To use a custom icon:
+
 1.  Get an .icns file
 2.  Copy it to $MOUNTPOINT
-    1. E.g., ```sudo cp PostgreSQL.icns /opt/local/var/db/postgresql9x/.VolumeIcon.icns```
 
-## References
+    1.   E.g., ```sudo cp PostgreSQL.icns /opt/local/var/db/postgresql9x/.VolumeIcon.icns```
+
+## Reference
 
 Several articles, blog posts and man pages were consulted to produce these scripts. Here are the most relevant:
 
