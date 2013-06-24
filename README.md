@@ -22,6 +22,7 @@ These install instructions assume you have:
 (This are plain and overly simplistic instructions, you may want to customize this even further)
 
     mkdir ~/opt
+    cd ~/opt
     git clone https://github.com/luismreis/postgres2ramdisk
     cd ~/bin
     ln -s ~/opt/postgres2ramdisk/bin/* .
