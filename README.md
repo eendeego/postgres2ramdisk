@@ -29,7 +29,7 @@ These install instructions assume you have:
 
     cp ~/opt/postgres2ramdisk/etc/postgres-common{.sample,}
 
-Open the file ```/opt/postgres2ramdisk/etc/postgres-common``` in your favorite editor and tune it according to
+Open the file ```~/opt/postgres2ramdisk/etc/postgres-common``` in your favorite editor and tune it according to
 your preferences (ramdisk size, macports vs homebrew, postgresql version.)
 
 ### Caveat Emptor
