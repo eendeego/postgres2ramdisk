@@ -4,7 +4,7 @@ source $(dirname $(readlink $0))/../etc/postgres-common
 
 CAPACITY=$(($CAPACITYMB * 1024 * 2))
 
-echo "Creating a ramdisk of size ${CAPACITYMB}MB (aprox.) size"
+echo "Creating a ramdisk of size ${CAPACITYMB}MB (aprox.)"
 
 [ -d $TMPDIR ] || mkdir $TMPDIR
 
